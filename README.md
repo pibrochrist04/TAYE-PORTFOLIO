@@ -84,4 +84,9 @@ La section de contact permet d'écrire directement par e-mail ou d'appeler. Le f
 - 📞 [+225 07 67 33 85 60](tel:+2250767338560)
 - 📍 Grand-Bassam, Côte d'Ivoire
 
+# Portfolio — Taye Christ Emmanuel
+
+- **Site en ligne :** https://christ-taye-portfolio.netlify.app/
+- **Vidéo de présentation :** https://drive.google.com/file/d/1DrTViR2JxyEfbOiSXlXJbalgbE3YI7Aw/view?usp=sharing
+
 © 2026 Taye Christ Emmanuel

@@ -2,6 +2,16 @@
 (function () {
   'use strict';
 
+  /* Social profile URLs: update these values when profile links change. */
+  const SOCIAL_LINKS = {
+    github: 'https://github.com/pibrochrist04',
+    linkedin: 'https://www.linkedin.com/in/christ-emmanuel-tay%C3%A9-169100419?utm_source=share_via&utm_content=profile&utm_medium=member_ios'
+  };
+  document.querySelectorAll('[data-social]').forEach((link) => {
+    const url = SOCIAL_LINKS[link.dataset.social];
+    if (url) link.href = url;
+  });
+
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const nav = document.getElementById('nav');
   const burger = document.getElementById('navBurger');
@@ -10,23 +20,24 @@
   /* ---- Sticky nav state + back-to-top visibility ---- */
   const onScroll = () => {
     const y = window.scrollY;
-    nav.classList.toggle('is-scrolled', y > 12);
-    toTop.classList.toggle('is-visible', y > 700);
+    if (nav) nav.classList.toggle('is-scrolled', y > 12);
+    if (toTop) toTop.classList.toggle('is-visible', y > 700);
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  toTop.addEventListener('click', () => {
+  toTop?.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
   });
 
   /* ---- Mobile menu ---- */
   const setMenu = (open) => {
+    if (!nav || !burger) return;
     nav.classList.toggle('is-open', open);
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
   };
-  burger.addEventListener('click', () => setMenu(!nav.classList.contains('is-open')));
+  burger?.addEventListener('click', () => setMenu(!nav.classList.contains('is-open')));
   document.querySelectorAll('.mobile-menu a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
   window.matchMedia('(min-width: 761px)').addEventListener('change', (e) => { if (e.matches) setMenu(false); });
@@ -52,17 +63,11 @@
   }
 
   /* ---- Active nav link ---- */
-  const links = document.querySelectorAll('.nav__link');
-  const sections = ['about', 'work'].map((id) => document.getElementById(id)).filter(Boolean);
-  if ('IntersectionObserver' in window) {
-    const spy = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        links.forEach((l) => l.classList.toggle('is-active', l.getAttribute('href') === `#${entry.target.id}`));
-      });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    sections.forEach((s) => spy.observe(s));
-  }
+  const currentPage = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  document.querySelectorAll('[data-page]').forEach((link) => {
+    if (link.dataset.page === currentPage) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
 
   /* ---- Project filters ---- */
   const grid = document.getElementById('workGrid');
@@ -77,7 +82,7 @@
         b.classList.toggle('is-active', on);
         b.setAttribute('aria-pressed', String(on));
       });
-      grid.classList.toggle('is-filtered', f !== 'all');
+      if (grid) grid.classList.toggle('is-filtered', f !== 'all');
 
       cards.forEach((card) => {
         const match = f === 'all' || card.dataset.cats.split(' ').includes(f);
